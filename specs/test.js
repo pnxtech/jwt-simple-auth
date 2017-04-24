@@ -71,7 +71,7 @@ describe('jwt-auth', () => {
   it('should be able to create a new token', (done) => {
     jwtAuth.init({});
     jwtAuth.loadCerts('./server.pem', './server.pub')
-      .then((result) => {
+      .then((_result) => {
         jwtAuth.createToken(payload)
           .then((token) => {
             expect(token).to.be.a('string');
@@ -86,7 +86,7 @@ describe('jwt-auth', () => {
       tokenExpirationInSeconds: 1
     });
     jwtAuth.loadCerts('./server.pem', './server.pub')
-      .then((result) => {
+      .then((_result) => {
         jwtAuth.createToken(payload)
           .then((token) => {
             jwtAuth.verifyToken(token)
@@ -102,7 +102,7 @@ describe('jwt-auth', () => {
   it('should fail to validate a token that has been tampered with', (done) => {
     jwtAuth.init({});
     jwtAuth.loadCerts('./server.pem', './server.pub')
-      .then((result) => {
+      .then((_result) => {
         jwtAuth.createToken(payload)
           .then((token) => {
             // tamper with token
@@ -124,7 +124,7 @@ describe('jwt-auth', () => {
       tokenExpirationInSeconds: 1
     });
     jwtAuth.loadCerts('./server.pem', './server.pub')
-      .then((result) => {
+      .then((_result) => {
         jwtAuth.createToken(payload)
           .then((token) => {
             return token;
@@ -147,11 +147,11 @@ describe('jwt-auth', () => {
       tokenExpirationInSeconds: 5
     });
     jwtAuth.loadCerts('./server.pem', './server.pub')
-      .then((result) => {
+      .then((_result) => {
         jwtAuth.createToken(payload)
           .then((token) => {
             jwtAuth.verifyToken(token)
-              .then((result) => {
+              .then((_result) => {
                 // delay refresh token because a token refreshed within the same
                 // time second will return the same token value.
                 setTimeout(() => {
@@ -172,11 +172,11 @@ describe('jwt-auth', () => {
       tokenExpirationInSeconds: 1
     });
     jwtAuth.loadCerts('./server.pem', './server.pub')
-      .then((result) => {
+      .then((_result) => {
         jwtAuth.createToken(payload)
           .then((token) => {
             jwtAuth.verifyToken(token)
-              .then((result) => {
+              .then((_result) => {
                 // delay refresh token so that original token ends up expiring.
                 setTimeout(() => {
                   jwtAuth.refreshToken(token)
@@ -195,7 +195,7 @@ describe('jwt-auth', () => {
       tokenExpirationInSeconds: 5
     });
     jwtAuth.loadCerts('./server.pem', './server.pub')
-      .then((result) => {
+      .then((_result) => {
         jwtAuth.createToken(payload)
           .then((token) => {
             let hash = jwtAuth.getTokenHash(token);
