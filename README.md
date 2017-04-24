@@ -1,11 +1,11 @@
-# jwt-auth
+# jwt-simple-auth
 
-[![npm version](https://badge.fury.io/js/fwsp-jwt-auth.svg)](https://badge.fury.io/js/fwsp-jwt-auth) <span class="badge-npmdownloads"><a href="https://npmjs.org/package/fwsp-jwt-auth" title="View this project on NPM"><img src="https://img.shields.io/npm/dm/fwsp-jwt-auth.svg" alt="NPM downloads" /></a></span> [![npm](https://img.shields.io/npm/l/fwsp-jwt-auth.svg)]()
+[![npm version](https://badge.fury.io/js/jwt-simple-auth.svg)](https://badge.fury.io/js/jwt-simple-auth) <span class="badge-npmdownloads"><a href="https://npmjs.org/package/jwt-simple-auth" title="View this project on NPM"><img src="https://img.shields.io/npm/dm/jwt-simple-auth.svg" alt="NPM downloads" /></a></span> [![npm](https://img.shields.io/npm/l/jwt-simple-auth.svg)]()
 
 [JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token) Authentication.
 
-### Using jwt-auth
-`jwt-auth` is intended for use by servers / services and relies on external RSA digital certificates in order to carry out its operations.
+### Using jwt-simple-auth
+`jwt-simple-auth` is intended for use by servers / services and relies on external RSA digital certificates in order to carry out its operations.
 Use the supplied `keygen.sh` script if you need to create a public/private key pair.
 
 Some services might use a private certificate to create a JSON Web Token, while another service might just use the public certificate to validate the authenticity of a token.
@@ -13,7 +13,7 @@ Some services might use a private certificate to create a JSON Web Token, while 
 Load jwt-auth as you would normally and load the private and public certificates.  You can replace the loadCerts parameters with `null` if you only need to load a private or public certificate.
 
 ```javascript
-const jwtAuth = require('fwsp-jwt-auth');
+const jwtAuth = require('fwsp-simple-auth');
 jwtAuth.loadCerts('./server.pem', './server.pub');
 ```
 
