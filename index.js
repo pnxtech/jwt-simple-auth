@@ -1,12 +1,19 @@
 'use strict';
-// JSON Web Token Authentication
 
 const Promise = require('bluebird');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const crypto = require('crypto');
 
+/**
+* @name JWTToken
+*/
 class JWTToken {
+  /**
+  * @name constructor
+  * @summary JWTToken constructor
+  * @return {undefined}
+  */
   constructor() {
     this.privateCert = null;
     this.publicCert = null;
@@ -19,6 +26,7 @@ class JWTToken {
   * @name init
   * @summary initialize JWTToken
   * @param {object} options - overrides for default options
+  * @return {undefined}
   */
   init(options) {
     this.options = Object.assign(this.options, options);
@@ -90,7 +98,7 @@ class JWTToken {
         issuer: 'urn:auth',
         exp: Math.floor(Date.now() / 1000) + this.options.tokenExpirationInSeconds
       });
-      jwt.sign(payload, this.privateCert, { algorithm: 'RS256' }, (err, token) => {
+      jwt.sign(payload, this.privateCert, {algorithm: 'RS256'}, (err, token) => {
         if (err) {
           reject(err);
         } else {
