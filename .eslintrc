@@ -1,6 +1,6 @@
 {
-  "plugins": ["jasmine"],
-  "extends": ["eslint:recommended", "plugin:jasmine/recommended"],
+  "plugins": ["mocha"],
+  "extends": ["eslint:recommended", "google"],
   "parserOptions": {
     "ecmaVersion": 6,
     "ecmaFeatures": {
@@ -9,8 +9,13 @@
     "sourceType": "module"
   },
   "rules": {
-    "valid-jsdoc": [2, {
-     "requireReturn": false
+    "valid-jsdoc": [ 2, {
+      "requireReturn": true,
+      "requireReturnDescription": true,
+      "requireParamDescription": true,
+      "prefer": {
+        "return": "return"
+      }
     }],
     "comma-dangle": 0,
     "curly": 2,
@@ -20,7 +25,7 @@
     "no-extra-semi": 2,
     "no-constant-condition": 2,
     "no-alert": 2,
-    "one-var-declaration-per-line": 2,
+    "one-var-declaration-per-line": [2, "always"],
     "operator-linebreak": [
       2,
       "after"
@@ -60,6 +65,7 @@
         "initialized": "never"
       }
     ],
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "keyword-spacing": [
       2,
       {}
@@ -88,7 +94,7 @@
     "browser": true,
     "node": true,
     "es6": true,
-    "jasmine": true
+    "mocha": true
   },
   "globals": {
     "-": 0

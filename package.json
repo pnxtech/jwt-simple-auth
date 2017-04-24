@@ -22,13 +22,14 @@
   },
   "homepage": "https://github.com/cjus/jwt-simple-auth#readme",
   "dependencies": {
-    "bluebird": "3.4.6",
-    "jsonwebtoken": "7.2.1"
+    "bluebird": "3.5.0",
+    "jsonwebtoken": "7.4.0"
   },
   "devDependencies": {
     "chai": "3.5.0",
-    "eslint": "3.12.2",
-    "eslint-plugin-jasmine": "2.2.0",
-    "mocha": "3.2.0"
+    "eslint": "3.19.0",
+    "eslint-config-google": "0.7.1",
+    "eslint-plugin-mocha": "4.9.0",
+    "mocha": "3.3.0"
   }
 }
