@@ -18,7 +18,8 @@ class JWTToken {
     this.privateCert = null;
     this.publicCert = null;
     this.options = {
-      tokenExpirationInSeconds: 3600
+      accessTokenExpirationInSeconds: 3600,
+      refreshTokenExpirationInSeconds: 2419200
     };
   }
 
@@ -30,6 +31,7 @@ class JWTToken {
   */
   init(options) {
     this.options = Object.assign(this.options, options);
+    console.log('this.options', this.options);
   }
 
   /**
@@ -86,17 +88,24 @@ class JWTToken {
   * @name createToken
   * @summary Create a signed JSON web token
   * @param {object} payload - user level payload to merge into token
+  * @param {string} type - 'access' | 'refresh'
   * @return {object} promise -
   */
-  createToken(payload) {
+  createToken(payload, type) {
     return new Promise((resolve, reject) => {
       if (!this.privateCert) {
         reject(new Error('Private certificate wasn\'t loaded in loadCerts call.'));
         return;
       }
+      let offsetSeconds = (type === 'access') ?
+        this.options.accessTokenExpirationInSeconds :
+        this.options.refreshTokenExpirationInSeconds;
+      let nowSeconds = Math.floor(Date.now() / 1000);
       payload = Object.assign(payload, {
         issuer: 'urn:auth',
-        exp: Math.floor(Date.now() / 1000) + this.options.tokenExpirationInSeconds
+        type,
+        iat: nowSeconds,
+        exp: nowSeconds + offsetSeconds
       });
       jwt.sign(payload, this.privateCert, {algorithm: 'RS256'}, (err, token) => {
         if (err) {
@@ -140,7 +149,11 @@ class JWTToken {
     return new Promise((resolve, reject) => {
       return this.verifyToken(token)
         .then((data) => {
-          return this.createToken(data)
+          if (data.type !== 'refresh') {
+            reject(new Error('Invalid token type'));
+            return;
+          }
+          return this.createToken(data, 'access')
             .then((newToken) => {
               resolve(newToken);
             })

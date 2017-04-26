@@ -9,7 +9,8 @@ require('./helpers/chai.js');
 
 const jwtAuth = require('../index.js');
 jwtAuth.init({
-  tokenExpirationInSeconds: 10
+  accessTokenExpirationInSeconds: 10,
+  refreshTokenExpirationInSeconds: 60
 });
 
 const payload = {
@@ -17,14 +18,14 @@ const payload = {
   admin: true
 };
 
-describe('jwt-auth', () => {
+describe('jwt-simple-auth', () => {
   it('should be able to change default options', () => {
     jwtAuth.init({
-      tokenExpirationInSeconds: 100
+      accessTokenExpirationInSeconds: 100
     });
     let options = jwtAuth.getOptions();
     expect(options).to.be.an('object');
-    expect(options.tokenExpirationInSeconds).to.equal(100);
+    expect(options.accessTokenExpirationInSeconds).to.equal(100);
   });
 
   it('should fail to load misnamed cert', (done) => {
@@ -37,7 +38,7 @@ describe('jwt-auth', () => {
 
   it('should be able to load only private cert', (done) => {
     jwtAuth.init({
-      tokenExpirationInSeconds: 10
+      accessTokenExpirationInSeconds: 10
     });
     jwtAuth.loadCerts('./server.pem', null)
       .then((result) => {
@@ -48,7 +49,7 @@ describe('jwt-auth', () => {
 
   it('should be able to load only public cert', (done) => {
     jwtAuth.init({
-      tokenExpirationInSeconds: 10
+      accessTokenExpirationInSeconds: 10
     });
     jwtAuth.loadCerts(null, './server.pub')
       .then((result) => {
@@ -59,7 +60,7 @@ describe('jwt-auth', () => {
 
   it('should be able to load private and public certs', (done) => {
     jwtAuth.init({
-      tokenExpirationInSeconds: 10
+      accessTokenExpirationInSeconds: 10
     });
     jwtAuth.loadCerts('./server.pem', './server.pub')
       .then((result) => {
@@ -83,11 +84,11 @@ describe('jwt-auth', () => {
 
   it('should validate a valid token', (done) => {
     jwtAuth.init({
-      tokenExpirationInSeconds: 1
+      accessTokenExpirationInSeconds: 1
     });
     jwtAuth.loadCerts('./server.pem', './server.pub')
       .then((_result) => {
-        jwtAuth.createToken(payload)
+        jwtAuth.createToken(payload, 'access')
           .then((token) => {
             jwtAuth.verifyToken(token)
               .then((response) => {
@@ -103,7 +104,7 @@ describe('jwt-auth', () => {
     jwtAuth.init({});
     jwtAuth.loadCerts('./server.pem', './server.pub')
       .then((_result) => {
-        jwtAuth.createToken(payload)
+        jwtAuth.createToken(payload, 'access')
           .then((token) => {
             // tamper with token
             token = token.substring(0, 99) + '*' + token.substring(100);
@@ -121,11 +122,11 @@ describe('jwt-auth', () => {
 
   it('should fail to validate an expired token', (done) => {
     jwtAuth.init({
-      tokenExpirationInSeconds: 1
+      accessTokenExpirationInSeconds: 1
     });
     jwtAuth.loadCerts('./server.pem', './server.pub')
       .then((_result) => {
-        jwtAuth.createToken(payload)
+        jwtAuth.createToken(payload, 'access')
           .then((token) => {
             return token;
           })
@@ -144,11 +145,11 @@ describe('jwt-auth', () => {
 
   it('should be able to obtain a new token given a valid token', (done) => {
     jwtAuth.init({
-      tokenExpirationInSeconds: 5
+      accessTokenExpirationInSeconds: 5
     });
     jwtAuth.loadCerts('./server.pem', './server.pub')
       .then((_result) => {
-        jwtAuth.createToken(payload)
+        jwtAuth.createToken(payload, 'refresh')
           .then((token) => {
             jwtAuth.verifyToken(token)
               .then((_result) => {
@@ -169,11 +170,11 @@ describe('jwt-auth', () => {
 
   it('should fail to obtain a new token given an invalid token', (done) => {
     jwtAuth.init({
-      tokenExpirationInSeconds: 1
+      accessTokenExpirationInSeconds: 1
     });
     jwtAuth.loadCerts('./server.pem', './server.pub')
       .then((_result) => {
-        jwtAuth.createToken(payload)
+        jwtAuth.createToken(payload, 'access')
           .then((token) => {
             jwtAuth.verifyToken(token)
               .then((_result) => {
@@ -192,11 +193,11 @@ describe('jwt-auth', () => {
 
   it('should return a token hash given a token', (done) => {
     jwtAuth.init({
-      tokenExpirationInSeconds: 5
+      accessTokenExpirationInSeconds: 5
     });
     jwtAuth.loadCerts('./server.pem', './server.pub')
       .then((_result) => {
-        jwtAuth.createToken(payload)
+        jwtAuth.createToken(payload, 'access')
           .then((token) => {
             let hash = jwtAuth.getTokenHash(token);
             expect(hash).to.be.a('string');

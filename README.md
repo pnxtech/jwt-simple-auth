@@ -10,25 +10,27 @@ Use the supplied `keygen.sh` script if you need to create a public/private key p
 
 Some services might use a private certificate to create a JSON Web Token, while another service might just use the public certificate to validate the authenticity of a token.
 
-Load jwt-auth as you would normally and load the private and public certificates.  You can replace the loadCerts parameters with `null` if you only need to load a private or public certificate.
+jwt-simple-auth works with two types of tokens: an access token and a refresh token. Access tokens are short lived (one hour by default) and will expire upon that time. You may use a refresh token to obtain a fresh new access token. The refresh token will also expire (one week by default) and at that point you'll need to create a new refresh token. In systems where users sign-in requesting a new refresh token requires entering valid credentials.
+
+Load jwt-simple-auth as you would normally and load the private and public certificates.  You can replace the loadCerts parameters with `null` if you only need to load a private or public certificate.
 
 ```javascript
-const jwtAuth = require('fwsp-simple-auth');
+const jwtAuth = require('jwt-simple-auth');
 jwtAuth.loadCerts('./server.pem', './server.pub');
 ```
 
 Overriding default options:
 
-The jwt-auth init member can be used to override default values. At this time there's only one default value: `tokenExpirationInSeconds` which as a default set to 3600 seconds or one hour.
+The jwt-auth init member can be used to override default values. At this time there's only two default values: `accessTokenExpirationInSeconds` which as a default set to 3600 seconds or one hour and `refreshTokenExpirationInSeconds` which defaults to 2419200 or four weeks.
 
-To set a token expiration to only 10 seconds:
+To set an access token expiration to only 10 seconds and a refresh token expiration to 60 seconds:
 
 ```javascript
 jwtAuth.init({
-  tokenExpirationInSeconds: 10
+  accessTokenExpirationInSeconds: 10,
+  refreshTokenExpirationInSeconds: 60
 });
 ```
-> Note: when using refreshToken, the token will be refreshed to the value set in the initialization options.
 
 To create a JWT token:
 
@@ -37,7 +39,7 @@ const payload = {
   userID: 34,
   admin: true
 };
-jwtAuth.createToken(payload)
+jwtAuth.createToken(payload, 'access')
   .then((token) => {
     // token is now ready for use.
   });
@@ -46,7 +48,7 @@ jwtAuth.createToken(payload)
 To verify a JWT token:
 
 ```javascript
-jwtAuth.verifyToken(token)
+jwtAuth.verifyToken(token, 'access')
   .then((response) => {
     // if valid, the response is decoded JWT payload, see verify token response below.
   });
