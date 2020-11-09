@@ -1,6 +1,3 @@
-'use strict';
-
-const Promise = require('bluebird');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const crypto = require('crypto');

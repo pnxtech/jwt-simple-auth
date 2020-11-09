@@ -1,10 +1,10 @@
 {
   "name": "jwt-simple-auth",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "description": "JSON Web Token Authentication Helper",
   "author": {
     "name": "Carlos Justiniano",
-    "email": "carlos.justiniano@gmail.com"
+    "email": "cjus@ieee.org"
   },
   "scripts": {
     "test": "mocha specs --reporter spec || true"
@@ -15,21 +15,20 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cjus/jwt-simple-auth.git"
+    "url": "git+https://github.com/pnxtech/jwt-simple-auth.git"
   },
   "bin": {
     "jwt-simple-auth": "index.js"
   },
-  "homepage": "https://github.com/cjus/jwt-simple-auth#readme",
+  "homepage": "https://github.com/pnxtech/jwt-simple-auth#readme",
   "dependencies": {
-    "bluebird": "3.5.0",
-    "jsonwebtoken": "7.4.0"
+    "jsonwebtoken": "8.5.1"
   },
   "devDependencies": {
     "chai": "3.5.0",
-    "eslint": "3.19.0",
+    "eslint": "4.18.2",
     "eslint-config-google": "0.7.1",
     "eslint-plugin-mocha": "4.9.0",
-    "mocha": "3.3.0"
+    "mocha": "8.1.3"
   }
 }
