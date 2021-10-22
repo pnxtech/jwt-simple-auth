@@ -87,7 +87,7 @@ class JWTToken {
   * @return {String} ID - unique ID
   */
   generateUniqueID() {
-    return `${(Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).toString(36)}:${new Date().getMilliseconds()}`;
+    return `${(Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).toString(36)}${new Date().getMilliseconds()}`;
   }
 
   /**
