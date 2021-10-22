@@ -82,6 +82,15 @@ class JWTToken {
   }
 
   /**
+  * @name generateUniqueID
+  * @summary Generate a unique ID
+  * @return {String} ID - unique ID
+  */
+  generateUniqueID() {
+    return `${(Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).toString(36)}:${new Date().getMilliseconds()}`;
+  }
+
+  /**
   * @name createToken
   * @summary Create a signed JSON web token
   * @param {object} payload - user level payload to merge into token
@@ -99,8 +108,9 @@ class JWTToken {
         this.options.refreshTokenExpirationInSeconds;
       let nowSeconds = Math.floor(Date.now() / 1000);
       payload = Object.assign(payload, {
-        issuer: 'urn:auth',
+        iss: 'urn:auth',
         type,
+        jti: this.generateUniqueID(),
         iat: nowSeconds,
         exp: nowSeconds + offsetSeconds
       });

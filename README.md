@@ -59,7 +59,8 @@ Verify token response
 {
   "userID": 34,
   "admin": true,
-  "issuer": "urn:auth",
+  "iss": "urn:auth",
+  "jti": "2fd6th6tqfz101",
   "exp": 1466614755,
   "iat": 1466614754
 }
