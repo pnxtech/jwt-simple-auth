@@ -95,9 +95,10 @@ class JWTToken {
   * @summary Create a signed JSON web token
   * @param {object} payload - user level payload to merge into token
   * @param {string} type - 'access' | 'refresh'
+  * @param {string} jti - optional JWT Token ID
   * @return {object} promise -
   */
-  createToken(payload, type) {
+  createToken(payload, type, jti) {
     return new Promise((resolve, reject) => {
       if (!this.privateCert) {
         reject(new Error('Private certificate wasn\'t loaded in loadCerts call.'));
@@ -107,10 +108,11 @@ class JWTToken {
         this.options.accessTokenExpirationInSeconds :
         this.options.refreshTokenExpirationInSeconds;
       let nowSeconds = Math.floor(Date.now() / 1000);
+      let newJTI = (jti) ? jti : this.generateUniqueID();
       payload = Object.assign(payload, {
         iss: 'urn:auth',
         type,
-        jti: this.generateUniqueID(),
+        jti: newJTI,
         iat: nowSeconds,
         exp: nowSeconds + offsetSeconds
       });
@@ -150,9 +152,10 @@ class JWTToken {
   * @name refreshToken
   * @summary Refresh a valid token
   * @param {string} token - JSON web token
+  * @param {stdring} jti - JWT token ID to use of undefined to generate a new one
   * @return {object} promise -
   */
-  refreshToken(token) {
+  refreshToken(token, jti) {
     return new Promise((resolve, reject) => {
       return this.verifyToken(token)
         .then((data) => {
@@ -160,7 +163,7 @@ class JWTToken {
             reject(new Error('Invalid token type'));
             return;
           }
-          return this.createToken(data, 'access')
+          return this.createToken(data, 'access', jti)
             .then((newToken) => {
               resolve(newToken);
             })
