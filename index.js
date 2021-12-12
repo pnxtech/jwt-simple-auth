@@ -47,20 +47,14 @@ class JWTToken {
   * @param {string} publicCertPath - path to public certificate
   * @return {object} promise -
   */
-  loadCerts(privateCertPath, publicCertPath) {
-    return new Promise((resolve, reject) => {
-      try {
-        if (privateCertPath) {
-          this.privateCert = fs.readFileSync(privateCertPath);
-        }
-        if (publicCertPath) {
-          this.publicCert = fs.readFileSync(publicCertPath);
-        }
-        resolve(true);
-      } catch (e) {
-        reject(e);
-      }
-    });
+  async loadCerts(privateCertPath, publicCertPath) {
+    if (privateCertPath) {
+      this.privateCert = await fs.readFile(privateCertPath);
+    }
+    if (publicCertPath) {
+      this.publicCert = await fs.readFile(publicCertPath);
+    }
+    return true;
   }
 
   /**
