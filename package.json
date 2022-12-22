@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/pnxtech/jwt-simple-auth#readme",
   "dependencies": {
-    "jsonwebtoken": "8.5.1"
+    "jsonwebtoken": "9.0.0"
   },
   "devDependencies": {
     "chai": "3.5.0",
